@@ -31,8 +31,8 @@ import net.minecraft.util.Identifier;
 public class PresenceFootsteps implements ClientModInitializer {
     public static final Logger logger = LogManager.getLogger("PFSolver");
 
-    private static final String MODID = "presencefootsteps";
-    private static final String KEY_BINDING_CATEGORY = "key.category." + MODID;
+    private static final String MOD_ID = "presencefootsteps";
+    private static final String KEY_BINDING_CATEGORY = "key.category." + MOD_ID;
     private static final String UPDATER_ENDPOINT = "https://raw.githubusercontent.com/Sollace/Presence-Footsteps/master/version/latest.json";
 
     public static final Text MOD_NAME = Text.translatable("mod.presencefootsteps.name");
@@ -82,9 +82,9 @@ public class PresenceFootsteps implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        Path pfFolder = GamePaths.getConfigDirectory().resolve("presencefootsteps");
+        Path pfFolder = GamePaths.getConfigDirectory().resolve(MOD_ID);
 
-        updater = new UpdateChecker(new UpdaterConfig(pfFolder.resolve("updater.json")), MODID, UPDATER_ENDPOINT, this::onUpdate);
+        updater = new UpdateChecker(new UpdaterConfig(pfFolder.resolve("updater.json")), MOD_ID, UPDATER_ENDPOINT, this::onUpdate);
 
         config = new PFConfig(pfFolder.resolve("userconfig.json"), this);
         config.load();
@@ -98,8 +98,8 @@ public class PresenceFootsteps implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(engine);
 
-        FabricLoader.getInstance().getModContainer("presencefootsteps").ifPresent(container -> {
-            ResourceManagerHelper.registerBuiltinResourcePack(new Identifier("presencefootsteps", "default_sound_pack"), container, SOUND_PACK_NAME, ResourcePackActivationType.DEFAULT_ENABLED);
+        FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container -> {
+            ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(MOD_ID, "default_sound_pack"), container, SOUND_PACK_NAME, ResourcePackActivationType.DEFAULT_ENABLED);
         });
     }
 

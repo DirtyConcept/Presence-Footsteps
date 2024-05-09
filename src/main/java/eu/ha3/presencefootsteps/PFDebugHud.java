@@ -8,6 +8,8 @@ import eu.ha3.presencefootsteps.sound.generator.Locomotion;
 import eu.ha3.presencefootsteps.world.PrimitiveLookup;
 import eu.ha3.presencefootsteps.world.SoundsKey;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.impl.util.log.Log;
+import net.fabricmc.loader.impl.util.log.LogCategory;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.Registries;
@@ -34,7 +36,8 @@ public class PFDebugHud {
         MinecraftClient client = MinecraftClient.getInstance();
 
         list.add("");
-        list.add(Formatting.UNDERLINE + "Presence Footsteps " + FabricLoader.getInstance().getModContainer("presencefootsteps").get().getMetadata().getVersion());
+        list.add(Formatting.UNDERLINE + "Presence Footsteps " + FabricLoader.getInstance().getModContainer("presencefootsteps").orElseThrow(() -> new IllegalStateException("Cannot find Presence Footstep in the Mod Container for some weird reason"))
+                .getMetadata().getVersion());
 
         PFConfig config = engine.getConfig();
         list.add(String.format("Enabled: %s, Multiplayer: %s, Running: %s", config.getEnabled(), config.getEnabledMP(), engine.isRunning(client)));
@@ -100,7 +103,7 @@ public class PFDebugHud {
     private static void insertAt(List<String> values, List<String> destination, String target, int offset) {
         int i = 0;
         for (; i < destination.size(); i++) {
-            if (destination.get(i).indexOf(target) != -1) {
+            if (destination.get(i).contains(target)) {
                 break;
             }
         }
@@ -129,6 +132,10 @@ public class PFDebugHud {
         combinedList.append(" ]");
         list.add(combinedList.toString());
 
+
+        // TODO: maybe remove this part of the code, since we already checked earlier
+        //  if sounds list is not empty, and strings list is not empty as we added on
+        //  the line above a non-null string to it.
         if (!list.isEmpty()) {
             return;
         }

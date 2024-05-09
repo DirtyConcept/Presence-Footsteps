@@ -29,9 +29,9 @@ public class UpdateChecker {
 
     private CompletableFuture<Optional<Versions>> cachedResult = CompletableFuture.completedFuture(Optional.empty());
 
-    public UpdateChecker(UpdaterConfig config, String modid, String server, Reporter reporter) {
+    public UpdateChecker(UpdaterConfig config, String modId, String server, Reporter reporter) {
         this.config = config;
-        this.currentVersion = new TargettedVersion(modid);
+        this.currentVersion = new TargettedVersion(modId);
         this.server = server;
         this.reporter = reporter;
     }
@@ -50,19 +50,17 @@ public class UpdateChecker {
         }
         started = true;
 
-        checkNow().thenAccept(o -> {
-            o.ifPresent(versions -> {
-                TargettedVersion latest = versions.latest();
+        checkNow().thenAccept(o -> o.ifPresent(versions -> {
+            TargettedVersion latest = versions.latest();
 
-                LOGGER.info("Server responded version: " + latest + ", we are " + currentVersion);
+            LOGGER.info("Server responded version: {}, we are {}", latest, currentVersion);
 
-                if (latest.version().compareTo(currentVersion.version()) > 0) {
-                    if (config.shouldReport(latest)) {
-                        reporter.report(latest, currentVersion);
-                    }
+            if (latest.version().compareTo(currentVersion.version()) > 0) {
+                if (config.shouldReport(latest)) {
+                    reporter.report(latest, currentVersion);
                 }
-            });
-        });
+            }
+        }));
     }
 
     public CompletableFuture<Optional<Versions>> checkNow() {
@@ -78,7 +76,7 @@ public class UpdateChecker {
             }
         }, Util.getIoWorkerExecutor()).exceptionally(e -> {
             LOGGER.error("Error occured whilst checking for updates", e);
-            return null;
+            return Optional.empty();
         });
     }
 }

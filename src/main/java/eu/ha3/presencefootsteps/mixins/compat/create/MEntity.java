@@ -10,15 +10,18 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = Entity.class, priority = 9999 /* Run us last */)
 abstract class MEntity implements ContraptionCollidable {
 
+    @Unique
     private int lastCollidedContraptionStateTick = -1;
+    @Unique
     private BlockState lastCollidedContraptionState = Blocks.AIR.getDefaultState();
 
     @Dynamic(
-        value = "forCollission(center, consumer) - Private member injected by Create. See: https://github.com/Fabricators-of-Create/Create/blob/49cc17e3de33c965b1c409130abe436821f7410c/src/main/java/com/simibubi/create/foundation/mixin/client/EntityContraptionInteractionMixin.java#L81C21-L81C21"
+        value = "forCollision(center, consumer) - Private member injected by Create. See: https://github.com/Fabricators-of-Create/Create/blob/49cc17e3de33c965b1c409130abe436821f7410c/src/main/java/com/simibubi/create/foundation/mixin/client/EntityContraptionInteractionMixin.java#L81C21-L81C21"
     )
     @Shadow
     private void forCollision(Vec3d anchorPos, TriConsumer<Object, BlockState, BlockPos> action) {}

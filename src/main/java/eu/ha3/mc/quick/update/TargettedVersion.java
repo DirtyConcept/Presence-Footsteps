@@ -19,14 +19,14 @@ public record TargettedVersion (
                 Version.parse(JsonHelper.getString(json, "version")));
     }
 
-    public TargettedVersion(String modid) {
-        this(getVersion("minecraft"), getVersion(modid));
+    public TargettedVersion(String modId) {
+        this(getVersion("minecraft"), getVersion(modId));
     }
 
-    public static Version getVersion(String modid) {
-        return FabricLoader.getInstance().getModContainer(modid)
+    public static Version getVersion(String modId) {
+        return FabricLoader.getInstance().getModContainer(modId)
                 .map(ModContainer::getMetadata)
                 .map(ModMetadata::getVersion)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown mod id: " + modid));
+                .orElseThrow(() -> new IllegalArgumentException("Unknown mod id: " + modId));
     }
 }

@@ -39,14 +39,16 @@ public class UpdaterConfig extends JsonFile {
 
     public boolean shouldReport(TargettedVersion newVersion) {
         try {
-            String sVer = newVersion.toString();
+            String newVersionStr = newVersion.toString();
 
-            if (!sVer.equals(lastKnownVersion)) {
-                lastKnownVersion = sVer;
+            if (!newVersionStr.equals(lastKnownVersion)) {
+                lastKnownVersion = newVersionStr;
                 displayRemaining = displayCount;
             }
 
-            return displayRemaining > 0 && displayRemaining-- >= 0;
+            if (displayRemaining <= 0) return false;
+            displayRemaining--;
+            return true;
         } finally {
             save();
         }

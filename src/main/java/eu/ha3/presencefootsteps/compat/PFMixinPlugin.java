@@ -23,7 +23,7 @@ public class PFMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.startsWith(MIXIN_PACKAGE)) {
-            if (mixinClassName.indexOf("create") != -1) {
+            if (mixinClassName.contains("create")) {
                 return FabricLoader.getInstance().isModLoaded("create");
             }
         }

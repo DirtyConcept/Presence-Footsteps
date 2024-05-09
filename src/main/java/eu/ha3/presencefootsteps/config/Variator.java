@@ -5,7 +5,7 @@ package eu.ha3.presencefootsteps.config;
  */
 public class Variator extends JsonFile {
     /**
-     * The maximum time a player can me immobile before PF picks it up as stopped
+     * The maximum time a player can be immobile before PF picks it up as stopped
      */
     public int IMMOBILE_DURATION = 200;
 
